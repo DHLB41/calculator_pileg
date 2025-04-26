@@ -1,0 +1,353 @@
+/* === GLOBAL RESET === */
+html, body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f9fafc;
+    color: #222;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+    box-sizing: border-box;
+}
+
+/* === HEADINGS === */
+h1 {
+    text-align: center;
+    color: #0b3d91;
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+h2, h3, h4 {
+    color: #0b3d91;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Fix for Streamlit markdown headings */
+div[data-testid="stMarkdownContainer"] h2,
+.section-heading {
+    border-left: 6px solid #0b3d91;
+    padding-left: 10px;
+    margin-top: 1rem;
+    color: #0b3d91;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.sub-section-heading {
+    color: #0b3d91;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* === TABLE CONTAINER === */
+.scrollable-table {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 600px;
+    width: 100%;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+    .scrollable-table {
+        max-height: 400px;
+    }
+}
+
+/* === TABLE STYLE === */
+.centered-table {
+    width: 100% !important;
+    table-layout: fixed;
+    font-family: inherit;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.centered-table th,
+.centered-table td {
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 10px 8px;
+    font-size: 14px;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+}
+
+.centered-table th {
+    background-color: #0b3d91;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.centered-table tr:hover td {
+    background-color: #f1f6ff;
+    font-weight: 500;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* === FORM INPUTS === */
+input[type=number],
+input[type=text],
+textarea,
+select,
+.stTextInput input,
+.stSelectbox select {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    width: 100%;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #0b3d91;
+    box-shadow: 0 0 0 2px rgba(11, 61, 145, 0.15);
+    transition: all 0.2s ease-in-out;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.stTextInput>div>div>input {
+    font-weight: 500;
+    font-size: 15px;
+    color: #0b3d91;
+}
+
+/* === BUTTONS === */
+button, .stButton button, div[data-testid="baseButton-secondary"] button, div[data-testid="baseButton-primary"] button {
+    background-color: #0b3d91 !important;
+    color: white !important;
+    font-weight: 600;
+    border-radius: 8px !important;
+    padding: 0.6rem 1.2rem !important;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+button:hover, .stButton button:hover, div[data-testid="baseButton-secondary"] button:hover, div[data-testid="baseButton-primary"] button:hover {
+    background-color: #09306f !important;
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+button:focus, .stButton button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11, 61, 145, 0.2);
+}
+
+button:active, .stButton button:active {
+    transform: scale(0.97);
+}
+
+/* === EXPANDER === */
+.streamlit-expanderHeader {
+    font-weight: bold;
+    color: #0b3d91;
+    font-size: 16px;
+}
+
+/* === RADIO & CHECKBOX === */
+.stRadio > div,
+.stCheckbox > div {
+    gap: 1rem;
+}
+
+.stRadio label,
+.stCheckbox label {
+    font-size: 14px;
+    color: #333;
+}
+
+/* === CAPTIONS === */
+.stCaption {
+    font-size: 13px;
+    color: #666;
+    margin-top: 0.8rem;
+}
+
+/* === METRICS === */
+.stMetric {
+    background-color: #eaf3ff;
+    border: 1px solid #c2dafc;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.stMetricLabel {
+    color: #0b3d91;
+    font-size: 13px;
+}
+
+.stMetricValue {
+    font-size: 24px !important;
+    font-weight: 700;
+    color: #0b3d91;
+}
+
+/* === ALERT BOX === */
+.alert-success, .alert-warning, .alert-error, .alert-info {
+    padding: 12px 16px;
+    margin: 1rem 0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background-color: #e6f9ed;
+    border-left: 5px solid #34a853;
+    color: #1e6633;
+}
+
+.alert-warning {
+    background-color: #fff8e6;
+    border-left: 5px solid #fbbc05;
+    color: #b05f00;
+}
+
+.alert-error {
+    background-color: #fce8e6;
+    border-left: 5px solid #ea4335;
+    color: #9b1c1c;
+}
+
+.alert-info {
+    background-color: #e6f2ff;
+    border-left: 5px solid #4285f4;
+    color: #174ea6;
+}
+
+/* === PROGRESS BAR === */
+.progress-container {
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    height: 12px;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 20px;
+    background-color: #0b3d91;
+    transition: width 0.4s ease-in-out;
+}
+
+/* === BADGE === */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    background-color: #e0ecff;
+    color: #0b3d91;
+    margin-right: 8px;
+}
+
+.badge.success {
+    background-color: #d4f4e1;
+    color: #0e6b3f;
+}
+
+.badge.warning {
+    background-color: #fff1d6;
+    color: #996a00;
+}
+
+.badge.danger {
+    background-color: #ffe5e0;
+    color: #a82323;
+}
+
+/* === EMPTY STATE === */
+.empty-state {
+    background-color: #f3f6f9;
+    color: #777;
+    font-size: 14px;
+    padding: 1.2rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px dashed #ccc;
+}
+
+/* === DIVIDER === */
+.divider {
+    height: 1px;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* === TOOLTIP === */
+.tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 8px;
+    background: #333;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    display: block;
+    opacity: 1;
+}
+
+/* === IMPROVED DISABLED INPUT === */
+input[disabled] {
+    color: #0b3d91 !important;
+    background-color: #f7f9fc !important;
+    font-weight: 600 !important;
+    opacity: 1 !important;
+}
