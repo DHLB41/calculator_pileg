@@ -1,18 +1,23 @@
-[theme]
-primaryColor = "#0b3d91"
-backgroundColor = "#f9fafc"
-secondaryBackgroundColor = "#ffffff"
-textColor = "#222222"
-font = "sans serif"
-
 [server]
 headless = true
-enableCORS = false
 port = 8501
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+base = "light"            # Pilihan: "light" atau "dark"
+primaryColor = "#0b3d91"   # Biru Pro untuk aksen tombol/link
+backgroundColor = "#f9fafc"  # Background app (putih lembut)
+secondaryBackgroundColor = "#ffffff"  # Background sidebar/komponen lain
+textColor = "#222222"        # Warna teks utama
+font = "sans serif"         # Pilihan font: "sans serif", "serif", "monospace"
 
 [client]
-showSidebarNavigation = false
-toolbarMode = "minimal"
+tooltipDelay = 500           # Delay tooltip (ms)
+tooltipHoverDelay = 100      # Hover delay sebelum tooltip muncul (ms)
 
-[ui]
-layout = "wide"
+[logger]
+level = "warning"
+
+[deprecation]
+showfileUploaderEncoding = false

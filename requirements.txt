@@ -6,11 +6,13 @@ streamlit==1.33.0
 # Pandas for data manipulation
 pandas==2.2.2
 
+# Openpyxl for handling Excel (.xlsx) files
+openpyxl==3.1.2
+
 # Optional: If you want advanced HTML to PDF export in the future
 weasyprint==61.2
 
 # (Already used internally) Additional supporting libraries
-# Note: These libraries are part of Python Standard Library or built-in, so no need to list:
 # - datetime
 # - os
 
