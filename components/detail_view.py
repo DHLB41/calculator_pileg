@@ -12,22 +12,22 @@ def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.text_input("Alokasi Kursi", value=format_ribuan(dapil['ALOKASI_KURSI']), disabled=False)
+            st.text_input("Alokasi Kursi", value=format_ribuan(dapil['ALOKASI_KURSI']), disabled=True)
         with col2:
-            st.text_input("Suara 2024", value=format_ribuan(dapil['SUARA_2024']), disabled=False)
+            st.text_input("Suara 2024", value=format_ribuan(dapil['SUARA_2024']), disabled=True)
         with col3:
-            st.text_input("Kursi 2024", value=format_ribuan(dapil['KURSI_2024']), disabled=False)
+            st.text_input("Kursi 2024", value=format_ribuan(dapil['KURSI_2024']), disabled=True)
 
         col4, col5, col6 = st.columns(3)
         with col4:
-            st.text_input("Target Kursi 2029", value=format_ribuan(dapil['TARGET_TAMBAHAN_KURSI']), disabled=False)
+            st.text_input("Target Kursi 2029", value=format_ribuan(dapil['TARGET_TAMBAHAN_KURSI']), disabled=True)
         with col5:
-            st.text_input("Target Suara 2029", value=format_ribuan(dapil['TOTAL_TARGET_SUARA_2029']), disabled=False)
+            st.text_input("Target Suara 2029", value=format_ribuan(dapil['TARGET_SUARA_2029']), disabled=True)
         with col6:
-            st.text_input("Partai Terendah Ke-2", value=f"{dapil['PARTAI_K2_TERENDAH']} ({format_ribuan(dapil['SUARA_K2'])} suara)", disabled=False)
+            st.text_input("Partai Terendah Ke-2", value=f"{dapil['PARTAI_K2_TERENDAH']} ({format_ribuan(dapil['SUARA_K2'])} suara)", disabled=True)
 
     # === TABEL SP PER KURSI ===
-    st.markdown("#### SP per Kursi")
+    st.markdown("#### 🔹 SP per Kursi")
     sp_kolom = ["SP", "SP_KURSI_1", "SP_KURSI_2", "SP_KURSI_3", "SP_KURSI_4"]
     df_sp = dapil[sp_kolom].to_frame().T.copy()
     df_sp.columns = ["TOTAL SP", "SP Kursi 1", "SP Kursi 2", "SP Kursi 3", "SP Kursi 4"]
@@ -41,7 +41,7 @@ def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_
     """, unsafe_allow_html=True)
 
     # === RAB ===
-    st.markdown("#### RAB per Kursi")
+    st.markdown("#### 💰 RAB per Kursi (SP x Angka Psikologis)")
     rab_sp_kursi = [int(dapil.get(f"SP_KURSI_{i}", 0) * angka_psikologis) for i in range(1, 5)]
     df_rab = pd.DataFrame([rab_sp_kursi], columns=[f"RAB Kursi {i}" for i in range(1, 5)])
     df_rab = df_rab.applymap(format_ribuan)
@@ -52,34 +52,36 @@ def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_
         </div>
     """, unsafe_allow_html=True)
 
-    # === TOTAL RAB ===
+    # === TOTAL RAB + Manajemen + Pendampingan ===
     total_rab_kursi = [rab + biaya_manajemen + biaya_pendampingan if rab > 0 else 0 for rab in rab_sp_kursi]
     total_rab_all = sum(total_rab_kursi)
     df_total = pd.DataFrame([total_rab_kursi + [total_rab_all]], columns=[f"Total RAB Kursi {i}" for i in range(1, 5)] + ["TOTAL RAB"])
     df_total = df_total.applymap(format_ribuan)
 
-    st.markdown("#### Total RAB (SP + Manajemen + Pendampingan)")
+    st.markdown("#### 🧮 Total RAB (SP + Manajemen + Pendampingan)")
     st.markdown(f"""
         <div class="scrollable-table">
             {df_total.to_html(index=False, classes="centered-table", escape=False)}
         </div>
     """, unsafe_allow_html=True)
 
+    # Update Total RAB ke df_terpilih real-time
     df_terpilih.at[idx, "TOTAL_RAB"] = total_rab_all
 
     # === TOMBOL ELIMINASI ===
-    if st.button("Eliminasi Dapil Ini", key=f"eliminasi_{idx}"):
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+    if st.button("🚫 Eliminasi Dapil Ini", key=f"eliminasi_{idx}"):
         st.session_state.show_popup = True
         st.session_state.elim_target = dapil["DAPIL"]
 
     if st.session_state.get("show_popup") and st.session_state.get("elim_target") == dapil["DAPIL"]:
         with st.form("form_eliminasi"):
-            alasan = st.text_area("Tuliskan alasan eliminasi dapil ini:", key="alasan_input", height=100)
+            alasan = st.text_area("📝 Tuliskan alasan eliminasi dapil ini:", key="alasan_input", height=100)
             col_a, col_b = st.columns(2)
             with col_a:
-                cancel = st.form_submit_button("Batal")
+                cancel = st.form_submit_button("❌ Batal")
             with col_b:
-                submit = st.form_submit_button("Konfirmasi Eliminasi")
+                submit = st.form_submit_button("🚫 Konfirmasi Eliminasi")
 
             if cancel:
                 st.session_state.show_popup = False
@@ -108,8 +110,9 @@ def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_
                 st.rerun()
 
 
+
 def tampilkan_dapil_dieliminasi(df_all_kriteria):
-    with st.expander("Lihat Dapil yang Telah Dieliminasi", expanded=False):
+    with st.expander("🚫 Lihat Dapil yang Telah Dieliminasi", expanded=False):
         if "eliminated_dapil" not in st.session_state or not st.session_state.eliminated_dapil:
             st.markdown("<div class='empty-state'>Belum ada dapil yang dieliminasi.</div>", unsafe_allow_html=True)
             return
@@ -120,16 +123,13 @@ def tampilkan_dapil_dieliminasi(df_all_kriteria):
             alasan = st.session_state.alasan_eliminasi.get(row["DAPIL"], "-")
             with st.container():
                 st.markdown(f"<h4><span class='badge danger'>{row['DAPIL']}</span></h4>", unsafe_allow_html=True)
-
-                # Informasi alasan dan metrik
                 st.markdown(f"**Alasan Eliminasi:** {alasan}", unsafe_allow_html=True)
                 st.markdown(
-                    f"**Target Kursi:** {row['TARGET_TAMBAHAN_KURSI']} | **Target Suara:** {format_ribuan(row['TOTAL_TARGET_SUARA_2029'])}",
+                    f"🎯 Target Kursi: **{row['TARGET_TAMBAHAN_KURSI']}** | 🗳️ Target Suara: **{format_ribuan(row['TARGET_SUARA_2029'])}**",
                     unsafe_allow_html=True)
 
-                # Tombol pemulihan
                 st.markdown("<div style='margin-top:0.5rem;'></div>", unsafe_allow_html=True)
-                if st.button("Restore", key=f"restore_{row['DAPIL']}"):
+                if st.button("🔁 Restore", key=f"restore_{row['DAPIL']}"):
                     st.session_state.eliminated_dapil.remove(row["DAPIL"])
                     st.session_state.alasan_eliminasi.pop(row["DAPIL"], None)
                     st.success(f"{row['DAPIL']} berhasil dikembalikan.")

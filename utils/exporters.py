@@ -6,7 +6,7 @@ def export_to_html(df_terpilih, df_dapil, selected_party, votes_2024, seats_2024
 
     # Format kolom utama
     df["Total RAB"] = df["TOTAL_RAB"].fillna(0).apply(format_ribuan)
-    df["Target Suara 2029"] = df["TOTAL_TARGET_SUARA_2029"].fillna(0).apply(format_ribuan)
+    df["Target Suara 2029"] = df["TARGET_SUARA_2029"].fillna(0).apply(format_ribuan)
     df["Suara 2024"] = df["SUARA_2024"].fillna(0).apply(format_ribuan)
     df["Target Kursi 2029"] = df["TARGET_TAMBAHAN_KURSI"].fillna(0).astype(int)
     df["Total SP"] = df["SP"].fillna(0).apply(format_ribuan)
@@ -19,7 +19,7 @@ def export_to_html(df_terpilih, df_dapil, selected_party, votes_2024, seats_2024
     df = df.sort_values(by=["GUGUSAN", "PROPINSI", "ROMAWI_ORDER"])
 
     # Total Summary Info
-    total_suara = format_ribuan(df["TOTAL_TARGET_SUARA_2029"].sum())
+    total_suara = format_ribuan(df["TARGET_SUARA_2029"].sum())
     total_kursi = int(df["TARGET_TAMBAHAN_KURSI"].sum())
     total_rab = format_ribuan(df["TOTAL_RAB"].sum())
     suara_2024 = format_ribuan(votes_2024)

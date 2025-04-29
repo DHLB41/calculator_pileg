@@ -51,10 +51,5 @@ from .calculations import (
     generate_kriteria_3,
     generate_kriteria_4,
     get_all_kriteria_combined,
-    hitung_suara_tambahan,
-    hitung_total_suara_tambahan,
-    hitung_sp,
-    hitung_sp_per_kursi,
-    hitung_total_rab_all,
     filter_dapil_terpilih,
 )

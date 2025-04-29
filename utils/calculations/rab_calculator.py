@@ -1,42 +1,28 @@
-def hitung_rab_per_kursi(sp: float, angka_psikologis: int) -> int:
-    """
-    Hitung RAB per kursi berdasarkan SP dan angka psikologis (biaya per suara).
-    """
-    return int(sp * angka_psikologis)
+import pandas as pd
 
+def hitung_rab_sp(row, angka_psikologis: int) -> int:
+    return int(row["SP"] * angka_psikologis)
 
-def hitung_total_rab_per_dapil(sp_list: list, biaya_manajemen: int, biaya_pendampingan: int) -> list:
-    """
-    Hitung total RAB per kursi dan keseluruhan untuk satu dapil.
+def hitung_biaya_manajemen(rab_sp: int) -> int:
+    return int(rab_sp / 3)
 
-    Args:
-        sp_list (list): List of SP_KURSI_1..4 dalam urutan
-        biaya_manajemen (int): biaya manajemen tetap per dapil
-        biaya_pendampingan (int): biaya pendampingan tetap per dapil
+def hitung_total_rab(rab_sp: int, biaya_manajemen: int, biaya_pendampingan: int) -> int:
+    return int(rab_sp + biaya_manajemen + biaya_pendampingan)
 
-    Returns:
-        list: Total RAB per kursi [RAB_1, RAB_2, RAB_3, RAB_4] dan total
-    """
-    rab_kursi = []
-    for sp in sp_list:
-        if sp > 0:
-            rab = int(sp * angka_psikologis) + biaya_manajemen + biaya_pendampingan
-        else:
-            rab = 0
-        rab_kursi.append(rab)
-    total = sum(rab_kursi)
-    return rab_kursi + [total]
+def proses_perhitungan_rab(df: pd.DataFrame, angka_psikologis: int, biaya_manajemen: int, biaya_pendampingan: int) -> pd.DataFrame:
+    df = df.copy()
 
+    # Hitung RAB_SP
+    df["RAB_SP"] = df["SP"].apply(lambda sp: sp * angka_psikologis)
 
-def hitung_total_rab_all(row, angka_psikologis: int, biaya_manajemen: int, biaya_pendampingan: int) -> int:
-    """
-    Hitung total keseluruhan RAB untuk satu baris (dapil).
-    Digunakan untuk apply per row.
-    """
-    total = 0
-    for i in range(1, 5):
-        sp = row.get(f"SP_KURSI_{i}", 0)
-        if sp > 0:
-            rab = sp * angka_psikologis + biaya_manajemen + biaya_pendampingan
-            total += rab
-    return int(total)
+    # Hitung Biaya Manajemen
+    df["BIAYA_MANAJEMEN"] = df["RAB_SP"].apply(lambda rab_sp: rab_sp // 3)
+
+    # Hitung Total RAB
+    df["TOTAL_RAB"] = df.apply(
+        lambda row: row["RAB_SP"] + row["BIAYA_MANAJEMEN"] + biaya_pendampingan
+        if row["SP"] > 0 else 0,
+        axis=1
+    )
+
+    return df
