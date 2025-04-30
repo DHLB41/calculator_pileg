@@ -21,16 +21,16 @@ def tampilkan_download_section(df_terpilih, df_dapil, selected_party, votes_2024
 
     # === TOMBOL DOWNLOAD ===
     st.download_button(
-        label="⬇️ Download Ringkasan (HTML)",
+        label="Download Ringkasan",
         data=html_bytes,
         file_name="rangkuman_kalkulasi_2029.html",
         mime="text/html",
-        help="Klik untuk mengunduh ringkasan dalam format HTML."
+        help="Klik untuk mengunduh ringkasan."
     )
 
     # === PETUNJUK LANJUTAN ===
     st.markdown("""
         <div class='alert-info'>
-            💡 Setelah mengunduh file, buka di browser dan tekan <strong>Ctrl + P</strong> (Windows) atau <strong>⌘ + P</strong> (Mac) untuk menyimpan sebagai PDF.
+            Setelah mengunduh file, buka di browser dan tekan <strong>Ctrl + P</strong> (Windows) atau <strong>⌘ + P</strong> (Mac) untuk menyimpan sebagai PDF.
         </div>
     """, unsafe_allow_html=True)

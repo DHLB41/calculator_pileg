@@ -22,14 +22,14 @@ def tampilkan_input_target_kursi():
 
     # === INPUT TARGET KURSI ===
     target_kursi = st.number_input(
-        "🎯 Target Perolehan Kursi Pemilu 2029",
+        "Target Perolehan Kursi Pemilu 2029",
         min_value=0,
         step=1,
         value=0
     )
 
     # === INPUT PROPORSI SP ===
-    st.markdown("<div class='sub-section-heading'>🧮 Proporsi Target SP per Kursi</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-section-heading'>Proporsi Target SP per Kursi</div>", unsafe_allow_html=True)
     st.caption("Atur persentase pembagian SP berdasarkan jumlah tambahan kursi yang ditargetkan untuk tiap dapil.")
 
     kursi_input = {}
@@ -37,7 +37,7 @@ def tampilkan_input_target_kursi():
 
     for i in range(1, 5):
         st.markdown(f"<div style='margin-top:1rem;'></div>", unsafe_allow_html=True)
-        st.markdown(f"**📈 Penambahan {i} Kursi**")
+        st.markdown(f"**Target {i} Kursi**")
         cols = st.columns(4)
         for j, col in enumerate(cols):
             with col:
@@ -55,11 +55,11 @@ def tampilkan_input_target_kursi():
     st.markdown("<div style='margin-top:1rem;'></div>", unsafe_allow_html=True)
 
     # === PENGATURAN TAMBAHAN ===
-    with st.expander("⚙️ Pengaturan Tambahan: Faktor Pengurang & Target Suara", expanded=False):
+    with st.expander("Pengaturan Tambahan: Faktor Pengurang & Target Suara", expanded=False):
         col1, col2, col3 = st.columns(3)
         with col1:
             kehilangan_2024 = st.number_input(
-                "📉 Potensi Kehilangan Suara 2029 (%)",
+                "Potensi Kehilangan Suara 2029 (%)",
                 min_value=0.0,
                 max_value=200.0,
                 step=1.0,
@@ -67,7 +67,7 @@ def tampilkan_input_target_kursi():
             )
         with col2:
             kehilangan_sp = st.number_input(
-                "📉 Potensi Kehilangan SP (%)",
+                "Potensi Kehilangan SP (%)",
                 min_value=0.0,
                 max_value=200.0,
                 step=1.0,
@@ -75,7 +75,7 @@ def tampilkan_input_target_kursi():
             )
         with col3:
             target_suara_2029 = st.number_input(
-                "📈 Proporsi Target Suara 2029 (%)",
+                "Proporsi Target Suara 2029 (%)",
                 min_value=0.0,
                 max_value=200.0,
                 step=1.0,

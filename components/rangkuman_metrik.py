@@ -28,15 +28,15 @@ def tampilkan_rangkuman_metrik(df_terpilih):
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric(label="📈 Total Target Suara 2029", value=format_ribuan(total_suara))
+            st.metric(label="Total Target Suara 2029", value=format_ribuan(total_suara))
         with col2:
-            st.metric(label="🎯 Target Tambahan Kursi", value=total_kursi)
+            st.metric(label="Target Tambahan Kursi", value=total_kursi)
         with col3:
-            st.metric(label="💸 Total RAB (Rp)", value=format_ribuan(total_rab))
+            st.metric(label="Total RAB (Rp)", value=format_ribuan(total_rab))
 
     # Caption
     st.markdown("<div style='margin-top:1rem;'></div>", unsafe_allow_html=True)
-    st.caption("📌 Rangkuman ini mencakup total agregat dari semua Dapil terpilih dalam simulasi.")
+    st.caption("Rangkuman ini mencakup total agregat dari semua Dapil terpilih dalam simulasi.")
 
     # Divider
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)

@@ -7,7 +7,7 @@ def tampilkan_ringkasan_dapil_terpilih(df_terpilih):
     """
 
     if df_terpilih.empty:
-        st.markdown("<div class='empty-state'>🚫 Tidak ada DAPIL yang memenuhi kriteria seleksi.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='empty-state'>Tidak ada DAPIL yang memenuhi kriteria seleksi.</div>", unsafe_allow_html=True)
         return
 
     # === HEADER ===
@@ -43,4 +43,4 @@ def tampilkan_ringkasan_dapil_terpilih(df_terpilih):
 
     # Footer info
     st.markdown("<div style='margin-top:0.8rem;'></div>", unsafe_allow_html=True)
-    st.caption(f"📄 Menampilkan {len(df_display)} DAPIL dari hasil seleksi seluruh kriteria.")
+    st.caption(f"Menampilkan {len(df_display)} DAPIL dari hasil seleksi seluruh kriteria.")

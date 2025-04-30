@@ -19,7 +19,7 @@ def tampilkan_tabel_dapil(df_dapil, df_suara, df_kursi, selected_party):
         kursi_dapil = df_kursi.set_index("DAPIL")[selected_party].to_dict()
     else:
         kursi_dapil = {dapil: 0 for dapil in df_kursi["DAPIL"]}
-        st.markdown("<div class='alert-warning'>⚠️ Partai ini tidak memperoleh kursi di Pemilu 2024.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='alert-warning'>Partai ini tidak memperoleh kursi di Pemilu 2024.</div>", unsafe_allow_html=True)
 
     suara_dapil = df_suara.set_index("DAPIL")[selected_party].to_dict()
 

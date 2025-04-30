@@ -18,7 +18,7 @@ def tampilkan_formulir_partai(df_suara, df_kursi):
 
     # === PILIH PARTAI ===
     partai_list = df_suara.columns[1:].tolist()
-    selected_party = st.selectbox("🗳️ Pilih Partai", partai_list)
+    selected_party = st.selectbox("Pilih Partai", partai_list)
 
     # === AMBIL DATA SUARA DAN KURSI ===
     votes_2024 = get_total_suara(df_suara, selected_party)
@@ -28,13 +28,13 @@ def tampilkan_formulir_partai(df_suara, df_kursi):
     col1, col2 = st.columns(2)
     with col1:
         st.text_input(
-            label="🔢 Perolehan Suara Pemilu 2024",
+            label="Perolehan Suara Pemilu 2024",
             value=format_ribuan(votes_2024),
             disabled=True
         )
     with col2:
         st.text_input(
-            label="🎯 Perolehan Kursi Pemilu 2024",
+            label="Perolehan Kursi Pemilu 2024",
             value=format_ribuan(seats_2024),
             disabled=True
         )
