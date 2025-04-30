@@ -113,7 +113,6 @@ else:
 df_terpilih = proses_perhitungan_rab(
     df_terpilih,
     angka_psikologis,
-    biaya_manajemen,
     biaya_pendampingan
 )
 
