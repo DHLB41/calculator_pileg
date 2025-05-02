@@ -117,7 +117,7 @@ df_terpilih = proses_perhitungan_rab(
 )
 
 # === TAMPILKAN RINGKASAN SEBARAN ===
-tampilkan_ringkasan_dapil_terpilih(df_terpilih)
+tampilkan_ringkasan_dapil_terpilih(df_terpilih, angka_psikologis, biaya_pendampingan)
 
 # === DETAIL DAPIL ===
 if "dapil_page" not in st.session_state:

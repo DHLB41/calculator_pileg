@@ -1,36 +1,36 @@
 import pandas as pd
 
 def hitung_rab_sp(row, angka_psikologis: int) -> int:
-    """
-    Hitung RAB SP berdasarkan SP x angka psikologis.
-    """
     return int(row["SP"] * angka_psikologis)
 
 def hitung_biaya_kampanye(rab_sp: int) -> int:
-    """
-    Hitung estimasi Biaya Kampanye (RAB_SP adalah 2/3 dari biaya kampanye).
-    """
     return int(rab_sp * 3 / 2)
 
 def hitung_biaya_manajemen(biaya_kampanye: int) -> int:
-    """
-    Hitung Biaya Manajemen sebagai 1/3 dari Biaya Kampanye.
-    """
     return int(biaya_kampanye / 3)
 
 def hitung_total_rab(rab_sp: int, biaya_manajemen: int, biaya_pendampingan: int) -> int:
-    """
-    Hitung Total RAB = RAB_SP + Biaya Manajemen + Biaya Pendampingan.
-    """
     return int(rab_sp + biaya_manajemen + biaya_pendampingan)
 
-def proses_perhitungan_rab(df: pd.DataFrame, angka_psikologis: int, biaya_pendampingan: int) -> pd.DataFrame:
+def proses_perhitungan_rab(
+    df: pd.DataFrame,
+    angka_psikologis: int,
+    biaya_pendampingan: int,
+    angka_psikologis_dapil: dict[str, int] = None
+) -> pd.DataFrame:
     """
-    Pipeline menghitung RAB: RAB_SP, Biaya Kampanye, Biaya Manajemen, Total RAB.
+    Pipeline menghitung RAB dengan kemungkinan override Angka Psikologis per dapil.
     """
+
     df = df.copy()
 
-    df["RAB_SP"] = df["SP"].apply(lambda sp: int(sp * angka_psikologis))
+    def get_angka_psikologis(dapil: str) -> int:
+        if angka_psikologis_dapil and dapil in angka_psikologis_dapil:
+            return angka_psikologis_dapil[dapil]
+        return angka_psikologis
+
+    df["ANGKA_PSIKOLOGIS"] = df["DAPIL"].apply(get_angka_psikologis)
+    df["RAB_SP"] = df.apply(lambda row: hitung_rab_sp(row, row["ANGKA_PSIKOLOGIS"]), axis=1)
     df["BIAYA_KAMPANYE"] = df["RAB_SP"].apply(hitung_biaya_kampanye)
     df["BIAYA_MANAJEMEN"] = df["BIAYA_KAMPANYE"].apply(hitung_biaya_manajemen)
 

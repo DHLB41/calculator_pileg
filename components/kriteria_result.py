@@ -1,14 +1,27 @@
 import streamlit as st
 from utils.formatters import format_ribuan
+from utils.calculations.rab_calculator import proses_perhitungan_rab
 
-def tampilkan_ringkasan_dapil_terpilih(df_terpilih):
+def tampilkan_ringkasan_dapil_terpilih(df_terpilih, angka_psikologis, biaya_pendampingan):
     """
     Menampilkan tabel rekap dapil terpilih dari hasil seleksi kriteria.
+    Kolom Total RAB akan diperbarui berdasarkan angka psikologis terkini.
     """
 
     if df_terpilih.empty:
         st.markdown("<div class='empty-state'>Tidak ada DAPIL yang memenuhi kriteria seleksi.</div>", unsafe_allow_html=True)
         return
+
+    # === HITUNG ULANG TOTAL RAB TERKINI ===
+    angka_psikologis_dapil = st.session_state.get("angka_psikologis_dapil", {})
+    df_rab = proses_perhitungan_rab(
+        df=df_terpilih,
+        angka_psikologis=angka_psikologis,
+        biaya_pendampingan=biaya_pendampingan,
+        angka_psikologis_dapil=angka_psikologis_dapil
+    )
+
+    df_terpilih["TOTAL_RAB"] = df_rab["TOTAL_RAB"]
 
     # === HEADER ===
     st.markdown("""
@@ -29,7 +42,6 @@ def tampilkan_ringkasan_dapil_terpilih(df_terpilih):
         "Target Kursi 2029", "Target Suara 2029", "Total RAB (Rp)"
     ]
 
-    # Format angka ribuan
     angka_cols = ["Suara 2024", "Target Suara 2029", "Total RAB (Rp)"]
     for kolom in angka_cols:
         df_display[kolom] = df_display[kolom].apply(format_ribuan)
@@ -41,6 +53,5 @@ def tampilkan_ringkasan_dapil_terpilih(df_terpilih):
         </div>
     """, unsafe_allow_html=True)
 
-    # Footer info
     st.markdown("<div style='margin-top:0.8rem;'></div>", unsafe_allow_html=True)
     st.caption(f"Menampilkan {len(df_display)} DAPIL dari hasil seleksi seluruh kriteria.")
