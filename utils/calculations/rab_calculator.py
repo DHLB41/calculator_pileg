@@ -9,6 +9,9 @@ def hitung_biaya_kampanye(rab_sp: int) -> int:
 def hitung_biaya_manajemen(biaya_kampanye: int) -> int:
     return int(biaya_kampanye / 3)
 
+def hitung_biaya_pendampingan(biaya_per_kursi: int, target_kursi: int) -> int:
+    return int(biaya_per_kursi * target_kursi)
+
 def hitung_total_rab(rab_sp: int, biaya_manajemen: int, biaya_pendampingan: int) -> int:
     return int(rab_sp + biaya_manajemen + biaya_pendampingan)
 
@@ -20,6 +23,7 @@ def proses_perhitungan_rab(
 ) -> pd.DataFrame:
     """
     Pipeline menghitung RAB dengan kemungkinan override Angka Psikologis per dapil.
+    Biaya pendampingan dikalikan dengan jumlah target kursi.
     """
 
     df = df.copy()
@@ -33,9 +37,12 @@ def proses_perhitungan_rab(
     df["RAB_SP"] = df.apply(lambda row: hitung_rab_sp(row, row["ANGKA_PSIKOLOGIS"]), axis=1)
     df["BIAYA_KAMPANYE"] = df["RAB_SP"].apply(hitung_biaya_kampanye)
     df["BIAYA_MANAJEMEN"] = df["BIAYA_KAMPANYE"].apply(hitung_biaya_manajemen)
+    df["BIAYA_PENDAMPINGAN"] = df["TARGET_TAMBAHAN_KURSI"].apply(
+        lambda target: hitung_biaya_pendampingan(biaya_pendampingan, target)
+    )
 
     df["TOTAL_RAB"] = df.apply(
-        lambda row: hitung_total_rab(row["RAB_SP"], row["BIAYA_MANAJEMEN"], biaya_pendampingan)
+        lambda row: hitung_total_rab(row["RAB_SP"], row["BIAYA_MANAJEMEN"], row["BIAYA_PENDAMPINGAN"])
         if row["SP"] > 0 else 0,
         axis=1
     )

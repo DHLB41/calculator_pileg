@@ -13,108 +13,77 @@ def safe_get(dapil_obj, key):
 
 def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_manajemen, biaya_pendampingan):
     idx = st.session_state.dapil_page
+    dapil_nama = safe_get(dapil, "DAPIL")
 
     if "angka_psikologis_dapil" not in st.session_state:
         st.session_state.angka_psikologis_dapil = {}
 
-    dapil_nama = safe_get(dapil, "DAPIL")
     st.markdown(f"### <span class='section-heading'>Detail Dapil:</span> <span class='badge'>{dapil_nama}</span>", unsafe_allow_html=True)
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 
-    # === INFO UTAMA ===
+    # === INFO DAPIL ===
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.text_input("Alokasi Kursi", value=format_ribuan(safe_get(dapil, 'ALOKASI_KURSI')), disabled=True)
+            st.text_input("Alokasi Kursi", value=format_ribuan(safe_get(dapil, "ALOKASI_KURSI")), disabled=True)
         with col2:
-            st.text_input("Suara 2024", value=format_ribuan(safe_get(dapil, 'SUARA_2024')), disabled=True)
+            st.text_input("Suara 2024", value=format_ribuan(safe_get(dapil, "SUARA_2024")), disabled=True)
         with col3:
-            st.text_input("Kursi 2024", value=format_ribuan(safe_get(dapil, 'KURSI_2024')), disabled=True)
-
+            st.text_input("Kursi 2024", value=format_ribuan(safe_get(dapil, "KURSI_2024")), disabled=True)
         col4, col5, col6 = st.columns(3)
         with col4:
-            st.text_input("Target Kursi 2029", value=format_ribuan(safe_get(dapil, 'TARGET_TAMBAHAN_KURSI')), disabled=True)
+            st.text_input("Target Kursi 2029", value=format_ribuan(safe_get(dapil, "TARGET_TAMBAHAN_KURSI")), disabled=True)
         with col5:
-            st.text_input("Target Suara 2029", value=format_ribuan(safe_get(dapil, 'TARGET_SUARA_2029')), disabled=True)
+            st.text_input("Target Suara 2029", value=format_ribuan(safe_get(dapil, "TARGET_SUARA_2029")), disabled=True)
         with col6:
             st.text_input("Partai Terendah Ke-2", value=f"{safe_get(dapil, 'PARTAI_K2_TERENDAH')} ({format_ribuan(safe_get(dapil, 'SUARA_K2'))} suara)", disabled=True)
 
     # === INPUT ANGKA PSIKOLOGIS PER DAPIL ===
     if angka_psikologis >= 1000:
         default_angka = st.session_state.angka_psikologis_dapil.get(dapil_nama, angka_psikologis)
-
         with st.form(f"form_angka_psiko_{dapil_nama}"):
-            input_angka = st.number_input(
-                label="Angka Psikologis Khusus Dapil",
-                min_value=1000,
-                max_value=1000000000,
-                step=10000,
-                value=default_angka,
-                key=f"angka_psiko_input_{dapil_nama}"
-            )
-            submitted = st.form_submit_button("🔁 Update Perhitungan")
-
+            input_angka = st.number_input("Angka Psikologis Khusus Dapil", min_value=1000, max_value=100_000_000, step=10000, value=default_angka, key=f"angka_psiko_input_{dapil_nama}")
+            submitted = st.form_submit_button("Update Perhitungan")
             if submitted:
                 st.session_state.angka_psikologis_dapil[dapil_nama] = input_angka
                 st.rerun()
     else:
-        st.warning("⚠️ Silakan isi terlebih dahulu Angka Psikologis secara umum (≥ 1000) sebelum mengatur per Dapil.")
+        st.warning("Silakan isi terlebih dahulu Angka Psikologis sebelum mengatur per Dapil.")
 
-    # === TABEL SP PER KURSI ===
+    # === SP PER KURSI ===
     st.markdown("#### SP per Kursi")
-    df_sp = pd.DataFrame([{
-        "TOTAL SP": safe_get(dapil, "SP"),
-        "SP Kursi 1": safe_get(dapil, "SP_KURSI_1"),
-        "SP Kursi 2": safe_get(dapil, "SP_KURSI_2"),
-        "SP Kursi 3": safe_get(dapil, "SP_KURSI_3"),
-        "SP Kursi 4": safe_get(dapil, "SP_KURSI_4"),
-    }])
+    sp_kolom = [f"SP_KURSI_{i}" for i in range(1, 5)]
+    sp_values = [safe_get(dapil, col) for col in sp_kolom]
+    total_sp = safe_get(dapil, "SP")
+    df_sp = pd.DataFrame([sp_values + [total_sp]], columns=[f"SP Kursi {i}" for i in range(1, 5)] + ["Total SP"])
     df_sp = df_sp.applymap(lambda x: format_ribuan(x) if x > 0 else "0")
-
-    st.markdown(f"""
-        <div class="scrollable-table">
-            {df_sp.to_html(index=False, classes="centered-table", escape=False)}
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(f"<div class='scrollable-table'>{df_sp.to_html(index=False, classes='centered-table', escape=False)}</div>", unsafe_allow_html=True)
 
     # === PERHITUNGAN RAB ===
     df_dapil_ini = pd.DataFrame([dapil])
-    df_rab = proses_perhitungan_rab(
-        df=df_dapil_ini,
-        angka_psikologis=angka_psikologis,
-        biaya_pendampingan=biaya_pendampingan,
-        angka_psikologis_dapil=st.session_state.angka_psikologis_dapil
-    )
-
+    df_rab = proses_perhitungan_rab(df_dapil_ini, angka_psikologis, biaya_pendampingan, st.session_state.angka_psikologis_dapil)
     rab_sp = df_rab.iloc[0]["RAB_SP"]
+    biaya_manajemen_final = df_rab.iloc[0]["BIAYA_MANAJEMEN"]
     total_rab_all = df_rab.iloc[0]["TOTAL_RAB"]
     angka_psiko_dapil_ini = st.session_state.angka_psikologis_dapil.get(dapil_nama, angka_psikologis)
 
-    # === RAB PER KURSI (SP x Angka Psikologis)
+    # === RAB SP PER KURSI
     st.markdown("#### RAB SP per Kursi")
     rab_sp_kursi = [int(safe_get(dapil, f"SP_KURSI_{i}") * angka_psiko_dapil_ini) for i in range(1, 5)]
-    df_rab = pd.DataFrame([rab_sp_kursi], columns=[f"RAB Kursi {i}" for i in range(1, 5)])
-    df_rab = df_rab.applymap(format_ribuan)
+    total_rab_sp_kursi = sum(rab_sp_kursi)
+    df_rab_kursi = pd.DataFrame([rab_sp_kursi + [total_rab_sp_kursi]], columns=[f"RAB Kursi {i}" for i in range(1, 5)] + ["Total RAB SP"])
+    df_rab_kursi = df_rab_kursi.applymap(format_ribuan)
+    st.markdown(f"<div class='scrollable-table'>{df_rab_kursi.to_html(index=False, classes='centered-table', escape=False)}</div>", unsafe_allow_html=True)
 
-    st.markdown(f"""
-        <div class="scrollable-table">
-            {df_rab.to_html(index=False, classes="centered-table", escape=False)}
-        </div>
-    """, unsafe_allow_html=True)
-
-    # === TOTAL RAB ===
+    # === TOTAL RAB
     st.markdown("#### Total RAB")
+    rab_sp_plus_manajemen = rab_sp + biaya_manajemen_final
     df_total = pd.DataFrame([[
-        format_ribuan(rab_sp),
+        format_ribuan(rab_sp_plus_manajemen),
         format_ribuan(biaya_pendampingan),
         format_ribuan(total_rab_all)
-    ]], columns=["RAB SP", "Biaya Pendampingan", "TOTAL RAB"])
-
-    st.markdown(f"""
-        <div class="scrollable-table">
-            {df_total.to_html(index=False, classes="centered-table", escape=False)}
-        </div>
-    """, unsafe_allow_html=True)
+    ]], columns=["RAB SP + Manajemen", "Biaya Pendampingan per Kursi", "TOTAL RAB"])
+    st.markdown(f"<div class='scrollable-table'>{df_total.to_html(index=False, classes='centered-table', escape=False)}</div>", unsafe_allow_html=True)
 
     df_terpilih.at[idx, "TOTAL_RAB"] = total_rab_all
 
@@ -158,7 +127,14 @@ def tampilkan_detail_dapil_terpilih(dapil, df_terpilih, angka_psikologis, biaya_
                 st.session_state.dapil_page += 1
                 st.rerun()
 
+def init_detail_session_state():
+    st.session_state.setdefault("eliminated_dapil", set())
+    st.session_state.setdefault("alasan_eliminasi", {})
+    st.session_state.setdefault("show_popup", False)
+    st.session_state.setdefault("elim_target", None)
+
 def tampilkan_dapil_dieliminasi(df_all_kriteria):
+    init_detail_session_state()
     with st.expander("Lihat Dapil yang Telah Dieliminasi", expanded=False):
         if "eliminated_dapil" not in st.session_state or not st.session_state.eliminated_dapil:
             st.markdown("<div class='empty-state'>Belum ada dapil yang dieliminasi.</div>", unsafe_allow_html=True)

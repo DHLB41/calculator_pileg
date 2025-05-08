@@ -1,4 +1,4 @@
-# app.py
+# PILEG_KALKULATOR.py
 
 import streamlit as st
 import pandas as pd
@@ -88,7 +88,7 @@ with st.expander("Input Estimasi Biaya Kampanye", expanded=True):
     col1, col2 = st.columns(2)
     with col1:
         angka_psikologis = st.number_input(
-            "Angka Psikologis per Suara",
+            "Angka Psikologis",
             min_value=0,
             step=1000,
             value=0,
@@ -96,7 +96,7 @@ with st.expander("Input Estimasi Biaya Kampanye", expanded=True):
         )
     with col2:
         biaya_pendampingan = st.number_input(
-            "Biaya Pendampingan per Dapil",
+            "Biaya Pendampingan",
             min_value=0,
             step=100000,
             value=0,
@@ -123,6 +123,17 @@ tampilkan_ringkasan_dapil_terpilih(df_terpilih, angka_psikologis, biaya_pendampi
 if "dapil_page" not in st.session_state:
     st.session_state.dapil_page = 0
 st.session_state.total_dapil = len(df_terpilih)
+
+# === LOMPAT LANGSUNG KE DAPIL TERTENTU ===
+dapil_list = df_terpilih["DAPIL"].tolist()
+current_dapil = df_terpilih.iloc[st.session_state.dapil_page]["DAPIL"]
+
+selected_dapil = st.selectbox("Pilih Dapil untuk ditampilkan:", options=dapil_list, index=dapil_list.index(current_dapil))
+
+if selected_dapil != current_dapil:
+    new_index = df_terpilih.index[df_terpilih["DAPIL"] == selected_dapil][0]
+    st.session_state.dapil_page = new_index
+    st.rerun()
 
 dapil_aktif = df_terpilih.iloc[st.session_state.dapil_page]
 

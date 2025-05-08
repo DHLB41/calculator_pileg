@@ -1,16 +1,17 @@
 # Requirements for Simulasi Kalkulasi Pemilu 2029
 
 # Streamlit for web app interface
-streamlit==1.33.0
+streamlit~=1.44.1
 
 # Pandas for data manipulation
-pandas==2.2.2
+pandas~=2.2.3
 
 # Openpyxl for handling Excel (.xlsx) files
 openpyxl==3.1.2
 
 # Optional: If you want advanced HTML to PDF export in the future
-weasyprint==61.2
+fpdf
+xlsxwriter
 
 # (Already used internally) Additional supporting libraries
 # - datetime

@@ -1,0 +1,8 @@
+feat: Integrasi input Angka Psikologis per Dapil dan perhitungan RAB dinamis
+
+- Menambahkan fitur override angka psikologis per Dapil di detail_view dengan UI form terintegrasi
+- Menghubungkan ulang perhitungan RAB (SP x angka psikologis) ke fungsi utama `proses_perhitungan_rab`
+- Menambahkan tombol 'Update Perhitungan' per Dapil untuk trigger rerun manual
+- Menyederhanakan tampilan total RAB: hanya menampilkan RAB SP, Biaya Pendampingan, dan Total
+- Memperbarui tampilan '4. Sebaran Dapil Potensial' agar kolom Total RAB selalu sinkron dengan override terbaru
+- Menambahkan utilitas `safe_get()` agar kompatibel dengan dict maupun Series pada input `dapil`

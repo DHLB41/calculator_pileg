@@ -21,7 +21,7 @@ source venv/bin/activate
 5. **Jalankan Aplikasi:**
 
 ```bash
-streamlit run app.py
+streamlit run PILEG_KALKULATOR.py
 ```
 
 ---

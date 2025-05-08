@@ -13,3 +13,17 @@ def tampilkan_judul_aplikasi():
         </p>
         <div class='divider'></div>
     """, unsafe_allow_html=True)
+
+def tampilkan_judul_simulasi():
+    """
+    Menampilkan header aplikasi utama dengan gaya visual profesional.
+    """
+    st.markdown("""
+        <h1 class='main-title' style='text-align:center; margin-bottom:0.2rem;'>
+            Simulasi Pencalonan Legislatif Pada Pemilu 2029
+        </h1>
+        <p style='text-align:center; font-size:16px; color:#555; margin-top:0; max-width:800px; margin-left:auto; margin-right:auto;'>
+            Simulasi interaktif pemilihan dapil dan partai  potensial untuk pencalonan.
+        </p>
+        <div class='divider'></div>
+    """, unsafe_allow_html=True)
